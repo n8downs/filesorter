@@ -74,10 +74,11 @@ def main():
     parser = argparse.ArgumentParser(description='Sort downloaded files for Plex')
     parser.add_argument('--src', dest='source', help='Directory where the source files live.')
     parser.add_argument('--dest', dest='destination', help='Directory where the sorted files should be copied.')
+    parser.add_argument('-d', dest='dryRun', action='store_true', help='Print out the files that would be copied without actually doing the work.')
 
     args = parser.parse_args()
     if args.destination is None or args.source is None:
-        print 'Usage: filesorter --src [SRC] --dest [DEST]'
+        print 'Usage: filesorter -d --src [SRC] --dest [DEST]'
         sys.exit(1)
 
     if not os.path.isdir(args.destination):
@@ -131,9 +132,12 @@ def main():
                     os.remove(dest)
 
                 if not os.path.exists(dest):
-                    print 'copying %r to %r ...' % (source, dest,),
-                    shutil.copyfile(source, dest)
-                    print 'done.'
+                    print 'copying\n  %r to\n  %r ...' % (source, dest,),
+                    if not args.dryRun:
+                        shutil.copyfile(source, dest)
+                        print 'done.'
+                    else:
+                        print '[skipped]'
 
         sleepMinutes = 15
         print 'Sleeping for %d minutes.' % (sleepMinutes,)
