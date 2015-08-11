@@ -13,6 +13,10 @@ def parseTitle(original, separator=' '):
     words = original.replace('.', ' ').split()
     for i, word in enumerate(words):
         words[i] = word.lower() if word.lower() in ['the', 'of', 'a', 'or', 'with'] else word.capitalize()
+
+    while words[-1] in ['-'] or re.search('\d\d\d\d', words[-1]):
+        words.pop()
+
     return separator.join(words)
 
 def normalize(filename, info):
@@ -33,7 +37,7 @@ def standard(filename, directory, episodeInfo):
         episodeInfo['episode'] = groups[2]
 
 def noSE(filename, directory, episodeInfo):
-    matches = re.search('(.+)\.([1-9])([0-9][0-9])[^\d]', filename)
+    matches = re.search('(.+)\.([1-9])([0-9][0-9])[^\dp]', filename)
     if matches:
         groups = matches.groups()
         episodeInfo['show'] = groups[0]
