@@ -103,7 +103,7 @@ def main():
 
             for filename in filenames:
                 extension = getFileExtension(filename)
-                if not extension in ['mkv', 'mp4']:
+                if not extension in ['mkv', 'mp4', 'avi']:
                     continue
 
                 episodeInfo = {}
